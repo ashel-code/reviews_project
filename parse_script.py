@@ -12,19 +12,19 @@ FILE_PATH = "page-source.html"
 
 class Setup:
     @staticmethod
-    def create_soup(file_path):
-        with open(file_path, 'r') as file:
+    def create_soup(file_path):     # create Beautiful Soup object
+        with open(file_path, 'r', encoding="utf-8") as file:
             source = file.read()
         file.close()
         new_soup = BeautifulSoup(source, 'lxml')
         return new_soup
 
     @staticmethod
-    def get_source_html(url):
+    def get_source_html(url):       # get source code of the page
         web_driver = webdriver.Safari()
         web_driver.get(url=url)
-        time.sleep(5)
-        with open('page-source.html', 'w') as file:
+        time.sleep(10)
+        with open('page-source.html', 'w', encoding="utf-8") as file:
             file.write(web_driver.page_source)
         file.close()
         web_driver.quit()
@@ -32,43 +32,43 @@ class Setup:
 
 class Prints:
     @staticmethod
-    def print_reviews(all_reviews):  # печать всех отзывов
+    def print_reviews(all_reviews):  # print all reviews
         for i, review in enumerate(all_reviews):
             print(i + 1, review.text)
 
     @staticmethod
-    def print_dates(dates):  # печать всех дат написания отзывов
+    def print_dates(dates):  # print all dates
         for i, date in enumerate(dates):
             print(i + 1, date.text)
 
     @staticmethod
-    def print_all(all_reviews, all_dates, all_ratings, all_names):
-        for i in range(len(reviews)):
+    def print_all(all_reviews, all_dates, all_ratings, all_names):  # print everything
+        for i in range(len(all_ratings)):
             print(i + 1, " - ", all_names[i].text, " - ", all_dates[i].text,
                   " - ", all_ratings[i], " - ", all_reviews[i].text)
 
 
-def get_reviews(new_soup):     # парсинг всех отзывов
+def get_reviews(new_soup):     # parse reviews
     all_reviews = new_soup.find_all('span', 'business-review-view__body-text')
     return all_reviews
 
 
-def get_average_rating(new_soup):     # парсинг средней оценки
+def get_average_rating(new_soup):     # parse average rating
     average_rating = new_soup.find_all('span', 'business-summary-rating-badge-view__rating-text')
     return average_rating
 
 
-def get_dates(new_soup):     # парсинг дат написания отзывов
+def get_dates(new_soup):     # parse review`s dates
     dates = new_soup.find_all('span', 'business-review-view__date')
     return dates
 
 
-def get_title(new_soup):
+def get_title(new_soup):    # parse title of the restaurant
     title = new_soup.find_all('h1', class_="card-title-view__title")
     return title[0].text
 
 
-def get_names(new_soup):
+def get_names(new_soup):    # parse user names
     all_names = new_soup.find_all('div', class_="business-review-view__author")
     fixed_names = []
     for name in all_names:
@@ -76,7 +76,7 @@ def get_names(new_soup):
     return fixed_names
 
 
-def get_ratings(new_soup):
+def get_ratings(new_soup):    # parse review`s ratings
     items = new_soup.find_all('div', class_="business-rating-badge-view__stars")[1:]
     rates = []
     for item in items:
@@ -89,18 +89,22 @@ def get_ratings(new_soup):
     return fixed_rates
 
 
-if os.path.exists(FILE_PATH) is False:
-    Setup.get_source_html(URL)
-soup = Setup.create_soup(FILE_PATH)
+def main():
+    if os.path.exists(FILE_PATH) is False:
+        Setup.get_source_html(URL)
+    soup = Setup.create_soup(FILE_PATH)
+
+    reviews = get_reviews(soup)
+    total_mark = get_average_rating(soup)
+    review_dates = get_dates(soup)
+    rating = get_ratings(soup)
+    names = get_names(soup)
+
+    print("Title -", get_title(soup))
+    print("Rating -", total_mark[0].text + "." + total_mark[2].text)
+    print("-------------------------------------------------------------------------")
+    Prints.print_all(reviews, review_dates, rating, names)
 
 
-reviews = get_reviews(soup)
-total_mark = get_average_rating(soup)
-review_dates = get_dates(soup)
-rating = get_ratings(soup)
-names = get_names(soup)
-
-print("Название -", get_title(soup))
-print("Оценка -", total_mark[0].text + "." + total_mark[2].text)
-print("-------------------------------------------------------------------------")
-Prints.print_all(reviews, review_dates, rating, names)
+if __name__ == "__main__":
+    main()
