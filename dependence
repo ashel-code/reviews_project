@@ -1,2 +1,3 @@
-gensim
-nltk
+torch
+transformers
+matplotlib
