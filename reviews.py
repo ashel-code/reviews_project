@@ -12,7 +12,7 @@ def main():
         # загружаем данные  
         data = json.load(json_file) 
     
-        parse(data['url'], data['file_path'])
+        parse(data['url'], data['page_path'])
 
 
     # # проверка достаточно ли аргументов
