@@ -4,10 +4,9 @@ from selenium import webdriver
 from bs4 import BeautifulSoup
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
+import comments
 
-URL = "https://yandex.ru/maps/213/moscow/?ll=37.589146%2C55.731010&mode=poi&poi%5Bpoint%5D=37." \
-      "589146%2C55.731010&poi%5Buri%5D=ymapsbm1%3A%2F%2Forg%3Foid%3D153977379747&tab=reviews&z=17.32"
-FILE_PATH = "page-source.html"
+
 
 
 class Setup:
@@ -109,7 +108,7 @@ def get_ratings(new_soup):    # parse review`s ratings
     return fixed_rates
 
 
-def main():
+def parse(URL, FILE_PATH):
     if os.path.exists(FILE_PATH) is False:
         Setup.get_source_html(URL)
     soup = Setup.create_soup(FILE_PATH)
@@ -125,6 +124,4 @@ def main():
     print("-------------------------------------------------------------------------")
     Prints.print_all(reviews, review_dates, rating, names)
 
-
-if __name__ == "__main__":
-    main()
+    comments.parseLists(rating, names, reviews, review_dates)
