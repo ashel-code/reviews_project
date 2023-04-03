@@ -2,8 +2,8 @@ import time
 import os.path
 from selenium import webdriver
 from bs4 import BeautifulSoup
-# from selenium.webdriver.common.keys import Keys
-# from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.by import By
 
 URL = "https://yandex.ru/maps/213/moscow/?ll=37.589146%2C55.731010&mode=poi&poi%5Bpoint%5D=37." \
       "589146%2C55.731010&poi%5Buri%5D=ymapsbm1%3A%2F%2Forg%3Foid%3D153977379747&tab=reviews&z=17.32"
@@ -24,8 +24,28 @@ class Setup:
         web_driver = webdriver.Safari()
         web_driver.get(url=url)
         time.sleep(10)
+
+        # Get scroll height
+        last_height = web_driver.execute_script("return document.body.scrollHeight")
+        new_height = 0
+        while True:
+            # Scroll down to bottom
+
+            for i in range(3):
+                web_driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+                time.sleep(5)
+                new_height = web_driver.execute_script("return document.body.scrollHeight")
+                if new_height != last_height:
+                    break
+                print(last_height, new_height)
+                web_driver.find_element(By.TAG_NAME, 'body').send_keys(Keys.CONTROL + Keys.HOME)
+
+            if new_height == last_height:
+                break
+            last_height = new_height
+        html = web_driver.page_source
         with open('page-source.html', 'w', encoding="utf-8") as file:
-            file.write(web_driver.page_source)
+            file.write(html)
         file.close()
         web_driver.quit()
 
@@ -44,7 +64,7 @@ class Prints:
     @staticmethod
     def print_all(all_reviews, all_dates, all_ratings, all_names):  # print everything
         for i in range(len(all_ratings)):
-            print(i + 1, " - ", all_names[i].text, " - ", all_dates[i].text,
+            print('~' + str(i + 1), " - ", all_names[i].text, " - ", all_dates[i].text,
                   " - ", all_ratings[i], " - ", all_reviews[i].text)
 
 
