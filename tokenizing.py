@@ -3,13 +3,14 @@ from transformers import BertModel, BertTokenizer
 import matplotlib.pyplot as plt
 
 def tok(texts):
+    for i in range(len(texts)):
+        print(i, texts[i])
     # Загрузка модели BERT и токенизатора
     model = BertModel.from_pretrained('bert-base-multilingual-cased')
     tokenizer = BertTokenizer.from_pretrained('bert-base-multilingual-cased')
 
     # Список текстов для обработки
     
-    print(texts)
 
     # Токенизация и пакетирование текстов
     tokenized_texts = [tokenizer.encode(text, add_special_tokens=True) for text in texts]
@@ -27,7 +28,13 @@ def tok(texts):
 
     # Визуализация векторов
     fig, ax = plt.subplots()
+    print(len(texts))
+
     for i, text in enumerate(texts):
+        # print(i)
         ax.scatter(last_hidden_states[i, 0], last_hidden_states[i, 1], label=i)
+        
+        ax.annotate(str(i), (last_hidden_states[i, 0], last_hidden_states[i, 1]))
+
     ax.legend()
     plt.show()
