@@ -13,17 +13,6 @@ def main():
         data = json.load(json_file) 
     
         parse(data['url'], data['page_path'])
-
-
-    # # проверка достаточно ли аргументов
-    # if len(args) < 2:
-    #     raise Exception("Not enough arguments provided")
- 
-    # # чтение аргумента с текстом (опционального)
-    # some_text = args[1]
- 
-    # # теперь можно что-то делать с текстом
-    # print(some_text)
  
 # вызов основной функции
 if __name__ == "__main__":

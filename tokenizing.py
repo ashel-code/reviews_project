@@ -1,6 +1,7 @@
 import torch
 from transformers import BertModel, BertTokenizer
 import matplotlib.pyplot as plt
+import clusterization as cl
 
 def tok(texts):
     for i in range(len(texts)):
@@ -31,10 +32,18 @@ def tok(texts):
     print(len(texts))
 
     for i, text in enumerate(texts):
-        # print(i)
+        print(i)
         ax.scatter(last_hidden_states[i, 0], last_hidden_states[i, 1], label=i)
         
         ax.annotate(str(i), (last_hidden_states[i, 0], last_hidden_states[i, 1]))
 
     ax.legend()
+    
+    plt.ion()
     plt.show()
+
+
+    print("PLT DONE")
+    cl.cluster(texts)
+    
+    

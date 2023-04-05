@@ -123,7 +123,7 @@ def parse(URL, FILE_PATH):
     print("Title -", get_title(soup))
     print("Rating -", total_mark[0].text + "." + total_mark[2].text)
     print("-------------------------------------------------------------------------")
-    Prints.print_all(reviews, review_dates, rating, names)
+    # Prints.print_all(reviews, review_dates, rating, names)
 
     comments_list = comments.parseLists(rating, names, reviews, review_dates)
 

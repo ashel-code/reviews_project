@@ -1,0 +1,11 @@
+tensorflow==2.12
+json
+torch
+transformers
+matplotlib
+selenium
+bs4
+numpy
+keras
+sklearn.cluster
+tokenizing
