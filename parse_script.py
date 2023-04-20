@@ -4,10 +4,8 @@ from selenium import webdriver
 from bs4 import BeautifulSoup
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
-
+from selenium.webdriver.chrome.options import Options
 import comments
-from analysis import run_analysis
-
 
 
 class Setup:
@@ -21,7 +19,9 @@ class Setup:
 
     @staticmethod
     def get_source_html(url):       # get source code of the page
-        web_driver = webdriver.Safari()
+        options = Options()
+        options.headless = True
+        web_driver = webdriver.Chrome(executable_path='chromedriver_mac_arm64', options=options)
         web_driver.get(url=url)
         time.sleep(10)
 
@@ -123,15 +123,6 @@ def parse(URL, FILE_PATH):
     print("Title -", get_title(soup))
     print("Rating -", total_mark[0].text + "." + total_mark[2].text)
     print("-------------------------------------------------------------------------")
-    # Prints.print_all(reviews, review_dates, rating, names)
-
-    comments_list = comments.parseLists(rating, names, reviews, review_dates)
+    Prints.print_all(reviews, review_dates, rating, names)
 
     comments.parseLists(rating, names, reviews, review_dates)
-#   for i in range(len(all_ratings)):
-#             print('~' + str(i + 1), " - ", all_names[i].text, " - ", all_dates[i].text,
-#                   " - ", all_ratings[i], " - ", all_reviews[i].text)
-
-    run_analysis(comments_list)
-
-    
