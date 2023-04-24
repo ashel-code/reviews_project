@@ -2,6 +2,7 @@ import sys
 from parse_script import parse
 import json 
 
+
 def main():
   
     # имя конфиг файла
@@ -13,7 +14,8 @@ def main():
         data = json.load(json_file) 
     
         parse(data['url'], data['page_path'])
- 
+
+
 # вызов основной функции
 if __name__ == "__main__":
     # main(sys.argv)

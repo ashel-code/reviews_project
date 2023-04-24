@@ -5,6 +5,8 @@ from bs4 import BeautifulSoup
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 import comments
 
 
@@ -20,31 +22,21 @@ class Setup:
     @staticmethod
     def get_source_html(url):       # get source code of the page
         options = Options()
-        options.headless = True
+        options.headless = False
         web_driver = webdriver.Chrome(executable_path='chromedriver_mac_arm64', options=options)
         web_driver.get(url=url)
-        time.sleep(10)
+        time.sleep(7)
 
-        # Get scroll height
-        last_height = web_driver.execute_script("return document.body.scrollHeight")
-        new_height = 0
-        while True:
-            # Scroll down to bottom
+        for i in range(175):
+            a = web_driver.find_element(By.CLASS_NAME, 'card-reviews-view__actions-button')
+            web_driver.execute_script("arguments[0].scrollIntoView();", a)
+            WebDriverWait(web_driver, 120000).until(
+                EC.presence_of_element_located((By.CLASS_NAME, 'business-review-view__body-text'))
+            )
+            time.sleep(1.5)
 
-            for i in range(3):
-                web_driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-                time.sleep(5)
-                new_height = web_driver.execute_script("return document.body.scrollHeight")
-                if new_height != last_height:
-                    break
-                print(last_height, new_height)
-                web_driver.find_element(By.TAG_NAME, 'body').send_keys(Keys.CONTROL + Keys.HOME)
-
-            if new_height == last_height:
-                break
-            last_height = new_height
         html = web_driver.page_source
-        with open('page-source.html', 'w', encoding="utf-8") as file:
+        with open('data/page-source.html', 'w', encoding="utf-8") as file:
             file.write(html)
         file.close()
         web_driver.quit()
