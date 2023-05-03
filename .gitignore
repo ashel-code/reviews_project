@@ -78,3 +78,7 @@ venv/
 
 
 chromedriver_mac_arm64/
+dataset/reviews/reviews.ibd
+dataset/reviews/restaurants.ibd
+dataset/reviews/restaurants.ibd
+dataset/reviews/restaurants.ibd
