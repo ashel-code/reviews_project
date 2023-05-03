@@ -37,23 +37,23 @@ def tok(texts):
 
 
 
-    # Визуализация векторов
-    fig, ax = plt.subplots()
-    print(len(texts))
+    # # Визуализация векторов
+    # fig, ax = plt.subplots()
+    # print(len(texts))
 
-    for i, text in enumerate(texts):
-        print(i)
-        ax.scatter(last_hidden_states[i, 0], last_hidden_states[i, 1], label=i)
+    # for i, text in enumerate(texts):
+    #     print(i)
+    #     ax.scatter(last_hidden_states[i, 0], last_hidden_states[i, 1], label=i)
         
-        ax.annotate(str(i), (last_hidden_states[i, 0], last_hidden_states[i, 1]))
+    #     ax.annotate(str(i), (last_hidden_states[i, 0], last_hidden_states[i, 1]))
 
-    ax.legend()
+    # ax.legend()
     
-    plt.ion()
-    plt.show()
+    # plt.ion()
+    # plt.show()
 
 
-    print("PLT DONE")
-    cl.cluster(texts)
+    # print("PLT DONE")
+    cl.cluster(last_hidden_states)
     
     
