@@ -1,5 +1,4 @@
 # from smth import sm
-import keyboard
 
 instructions = '''- press [x] to stop
 - press [f] to mark as fake

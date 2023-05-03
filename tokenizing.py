@@ -1,8 +1,10 @@
 import torch
 from transformers import BertModel, BertTokenizer, BertConfig
-import matplotlib.pyplot as plt
-import clusterization as cl
+import numpy as np
+import structure.unvectorized_data
 
+
+texts = ['какая я то умная шиза длиннее чем ноль и больше чем нечто другое вот']
 def tok(texts):
     for i in range(len(texts)):
         print(i, texts[i])
@@ -52,8 +54,21 @@ def tok(texts):
     # plt.ion()
     # plt.show()
 
-
+    np.savetxt('vector.txt', last_hidden_states[0])
     # print("PLT DONE")
-    cl.cluster(last_hidden_states)
+    # cl.cluster(last_hidden_states)
+
+
     
     
+tok(texts)
+# # somedata = getdata(db driver)
+
+# def main():
+#     pass
+#     # tokenize(somedata)
+
+# # вызов основной функции
+# if __name__ == "__main__":
+#     # main(sys.argv)
+#     main()

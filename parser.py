@@ -7,11 +7,8 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-import comments
-from analysis import run_analysis
-from mysql.connector import connect
-import datetime
-
+import stucture.comments as comments
+from vectorizing.main import run_analysis
 
 class Setup:
     @staticmethod
@@ -30,10 +27,7 @@ class Setup:
         web_driver.get(url=url)
         time.sleep(7)
 
-        # amount_of_reviews = len(web_driver.find_elements(By.CLASS_NAME, 'business-review-view__body-text'))
-        # amount_of_reviews = int(web_driver.find_element(By.CLASS_NAME, "card-section-header _wide _type_h2").text[0:3])
-        # print(amount_of_reviews)
-        for i in range(160):
+        for i in range(175):
             a = web_driver.find_element(By.CLASS_NAME, 'card-reviews-view__actions-button')
             web_driver.execute_script("arguments[0].scrollIntoView();", a)
             WebDriverWait(web_driver, 120000).until(
@@ -66,11 +60,6 @@ class Prints:
                   " - ", all_ratings[i], " - ", all_reviews[i].text)
 
 
-def get_amount_reviews(new_soup):
-    amount_of_reviews = new_soup.find('h2', "card-section-header__title _wide").text
-    return amount_of_reviews
-
-
 def get_reviews(new_soup):     # parse reviews
     all_reviews = new_soup.find_all('span', 'business-review-view__body-text')
     return all_reviews
@@ -83,10 +72,6 @@ def get_average_rating(new_soup):     # parse average rating
 
 def get_dates(new_soup):     # parse review`s dates
     dates = new_soup.find_all('span', 'business-review-view__date')
-    for i in range(len(dates)):
-        if sum([ 1 for s in dates[i] if s.isdigit() ]) < 3:
-            dates[i] += datetime.date.year
-
     return dates
 
 
@@ -129,22 +114,8 @@ def parse(URL, FILE_PATH):
 
     print("Title -", get_title(soup))
     print("Rating -", total_mark[0].text + "." + total_mark[2].text)
-    print("Total amount of reviews - ", get_amount_reviews(soup))
     print("-------------------------------------------------------------------------")
     Prints.print_all(reviews, review_dates, rating, names)
-    with connect(
-            host="localhost",
-            user="root",
-            password="BackupDR",
-            database="reviews"
-    ) as connection:
-        for i in range(len(reviews)):
-            db_query = f'INSERT INTO reviews_data.reviews_list (id, score, author, review_data, review_text, restaurant)' \
-                       f'VALUES({i + 1}, {rating[i]}, {names[i].text}, {review_dates[i]}, {reviews[i].text}, {get_title(soup)})'
-            with connection.cursor() as cursor:
-                cursor.execute(db_query)
-
-
 
     comments.parseLists(rating, names, reviews, review_dates)
-    # run_analysis(comments.parseLists(rating, names, reviews, review_dates))
+    run_analysis(comments.parseLists(rating, names, reviews, review_dates))
