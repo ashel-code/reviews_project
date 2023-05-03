@@ -1,5 +1,5 @@
 import torch
-from transformers import BertModel, BertTokenizer
+from transformers import BertModel, BertTokenizer, BertConfig
 import matplotlib.pyplot as plt
 import clusterization as cl
 
@@ -7,9 +7,17 @@ def tok(texts):
     for i in range(len(texts)):
         print(i, texts[i])
     # Загрузка модели BERT и токенизатора
-    model = BertModel.from_pretrained('bert-base-multilingual-cased')
-    tokenizer = BertTokenizer.from_pretrained('bert-base-multilingual-cased')
+    # model = BertModel.from_pretrained('bert-base-multilingual-cased')
+    # tokenizer = BertTokenizer.from_pretrained('bert-base-multilingual-cased')
 
+    # Load the BERT tokenizer and configuration
+    tokenizer = BertTokenizer.from_pretrained('bert-base-multilingual-cased')
+    config = BertConfig.from_pretrained('bert-base-multilingual-cased')
+    config.max_position_embeddings = 1024 # Increase the maximum sequence length
+
+
+    # Load the BERT model with the modified configuration
+    model = BertModel.from_pretrained('bert-base-multilingual-cased', config=config, ignore_mismatched_sizes=True)
     # Список текстов для обработки
     
 
@@ -26,6 +34,8 @@ def tok(texts):
     
     # for i, text in enumerate(texts):
     #     print(f"Вектор текста {i+1}: {last_hidden_states[i].tolist()}")
+
+
 
     # Визуализация векторов
     fig, ax = plt.subplots()

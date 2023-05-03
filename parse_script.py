@@ -8,7 +8,7 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import comments
-
+from analysis import run_analysis
 
 class Setup:
     @staticmethod
@@ -23,7 +23,7 @@ class Setup:
     def get_source_html(url):       # get source code of the page
         options = Options()
         options.headless = False
-        web_driver = webdriver.Chrome(executable_path='chromedriver_mac_arm64', options=options)
+        web_driver = webdriver.Chrome(executable_path='chromedriver', options=options)
         web_driver.get(url=url)
         time.sleep(7)
 
@@ -33,7 +33,7 @@ class Setup:
             WebDriverWait(web_driver, 120000).until(
                 EC.presence_of_element_located((By.CLASS_NAME, 'business-review-view__body-text'))
             )
-            time.sleep(1.5)
+            time.sleep(0.3)
 
         html = web_driver.page_source
         with open('data/page-source.html', 'w', encoding="utf-8") as file:
@@ -118,3 +118,4 @@ def parse(URL, FILE_PATH):
     Prints.print_all(reviews, review_dates, rating, names)
 
     comments.parseLists(rating, names, reviews, review_dates)
+    run_analysis(comments.parseLists(rating, names, reviews, review_dates))
