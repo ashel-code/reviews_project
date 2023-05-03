@@ -9,3 +9,4 @@ numpy
 keras
 sklearn.cluster
 tokenizing
+mysql-connector-python
