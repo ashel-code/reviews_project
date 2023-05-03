@@ -9,33 +9,31 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 def cluster(texts):
     # Load vectorized comments as an array
     # comments = np.load('vectorized_comments.npy')
-    comments = np.array(texts)
+
 
     # Convert comments to a numerical representation using TF-IDF
-    vectorizer = TfidfVectorizer(max_features=768)
-    comment_vectors = vectorizer.fit_transform(comments).toarray()
 
     # Модель нейронной сети
     model = Sequential()
-    model.add(Dense(512, input_dim=768, activation='relu'))
+    model.add(Dense(64, input_dim=768, activation='relu'))
     model.add(Dense(256, activation='relu'))
-    model.add(Dense(128, activation='relu'))
+    model.add(Dense(768, activation='relu'))
+    model.add(Dense(256, activation='relu'))
     model.add(Dense(2, activation='softmax'))
 
     # Compile the model
     model.compile(loss='categorical_crossentropy', optimizer='adam')
 
     # Train the model
-    model.fit(comment_vectors, np.array([[1,0]]*len(comment_vectors)), epochs=50, verbose=1)
+    model.fit(texts, np.array([[1,0]]*len(texts)), epochs=100, verbose=1)
 
     # Get cluster labels
-    labels = KMeans(n_clusters=2).fit_predict(model.predict(comment_vectors))
+    labels = KMeans(n_clusters=2).fit_predict(model.predict(texts))
 
     # Separate comments into fake and genuine
-    fake_comments = comments[labels == 0]
-    genuine_comments = comments[labels == 1]
-    print(fake_comments)
-    print(genuine_comments)
+    fake_comments = texts[labels == 0]
+    genuine_comments = texts[labels == 1]
+
     for com in genuine_comments:
         print(texts.index(com))
 
