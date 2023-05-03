@@ -38,3 +38,5 @@ def cluster(texts):
         print(texts.index(com))
 
     return genuine_comments, fake_comments
+
+
