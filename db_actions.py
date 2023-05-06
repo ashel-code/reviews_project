@@ -38,6 +38,22 @@ class DatabaseActions:
         return result
 
     @staticmethod
+    def add_element(rating, review_date, author, review_text, restaurant):
+        with connect(
+                host="localhost",
+                user="root",
+                password="BackupDR",
+                database="reviews"
+        ) as connection:
+            query = f'INSERT INTO reviews (rating, review_date, author, review_text, restaurant) VALUES ({rating}, "{review_date}", "{author}", "{review_text}", "{restaurant}")'
+            with connection.cursor() as cursor:
+                cursor.execute(query)
+                connection.commit()
+                print("added")
+                cursor.close()
+            connection.close()
+
+    @staticmethod
     def convert_to_unvectorized_class(data):
         result = []
         for d in data:

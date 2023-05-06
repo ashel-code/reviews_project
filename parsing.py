@@ -26,7 +26,7 @@ class Setup:
     @staticmethod
     def get_source_html(url):       # get source code of the page
         options = Options()
-        options.headless = False
+        options.headless = True
         web_driver = webdriver.Chrome(executable_path='chromedriver', options=options)
         web_driver.get(url=url)
         time.sleep(7)
@@ -37,7 +37,7 @@ class Setup:
             WebDriverWait(web_driver, 120000).until(
                 EC.presence_of_element_located((By.CLASS_NAME, 'business-review-view__body-text'))
             )
-            time.sleep(0.3)
+            time.sleep(0.7)
 
         html = web_driver.page_source
         with open('page-source.html', 'w', encoding="utf-8") as file:
@@ -61,12 +61,17 @@ class Prints:
     def print_all(all_reviews, all_dates, all_ratings, all_names):  # print everything
         for i in range(len(all_ratings)):
             print('~' + str(i + 1), " - ", all_names[i].text, " - ", all_dates[i],
-                  " - ", all_ratings[i], " - ", all_reviews[i].text)
+                  " - ", all_ratings[i], " - ", all_reviews[i])
 
 
 def get_reviews(new_soup):     # parse reviews
     all_reviews = new_soup.find_all('span', 'business-review-view__body-text')
-    return all_reviews
+    result = []
+    for i in all_reviews:
+        elem = i.text.replace('"', ' ')
+        elem.replace("'", ' ')
+        result.append(elem)
+    return result
 
 
 def get_average_rating(new_soup):     # parse average rating
@@ -168,18 +173,5 @@ def parse(URL, FILE_PATH):
     print("Rating -", total_mark[0].text + "." + total_mark[2].text)
     print("-------------------------------------------------------------------------")
     Prints.print_all(reviews, review_dates, rating, names)
-    '''
-    with connect(
-            host="localhost",
-            user="root",
-            password="BackupDR",
-            database="reviews"
-    ) as connection:
-        for i in range(len(reviews)):
-            db_query = f'INSERT INTO reviews_data.reviews_list (id, score, author, review_data, review_text, restaurant)' \
-                       f'VALUES({i + 1}, {rating[i]}, {names[i].text}, {review_dates[i]}, {reviews[i].text}, {get_title(soup)})'
-            with connection.cursor() as cursor:
-                cursor.execute(db_query)
-    '''
     comments.parseLists(rating, names, reviews, review_dates)
     # run_analysis(comments.parseLists(rating, names, reviews, review_dates))
