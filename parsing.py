@@ -9,6 +9,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from mysql.connector import connect
 import structure.comments as comments
+from db_actions import DatabaseActions
 # from main import run_analysis
 import datetime
 
@@ -39,7 +40,7 @@ class Setup:
             time.sleep(0.3)
 
         html = web_driver.page_source
-        with open('data/page-source.html', 'w', encoding="utf-8") as file:
+        with open('page-source.html', 'w', encoding="utf-8") as file:
             file.write(html)
         file.close()
         web_driver.quit()
