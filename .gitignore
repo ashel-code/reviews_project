@@ -83,3 +83,8 @@ dataset/reviews/restaurants.ibd
 dataset/reviews/restaurants.ibd
 dataset/reviews/restaurants.ibd
 vector.txt
+data/page-source.html
+*.icloud
+vector.txt
+vector.txt
+.DS_Store
