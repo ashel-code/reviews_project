@@ -1,8 +1,5 @@
 # from smth import sm
-<<<<<<< Updated upstream:manual_parser.py
-=======
 
->>>>>>> Stashed changes:manual_parsing/main.py
 
 instructions = '''- press [x] to stop
 - press [f] to mark as fake

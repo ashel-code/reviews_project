@@ -1,5 +1,5 @@
 import sys
-from parsing.parser import parse
+from parser import parse
 import json 
 
 

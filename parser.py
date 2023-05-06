@@ -7,8 +7,11 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-import stucture.comments as comments
-from vectorizing.main import run_analysis
+from mysql.connector import connect
+import structure.comments as comments
+# from main import run_analysis
+import datetime
+
 
 class Setup:
     @staticmethod
@@ -56,7 +59,7 @@ class Prints:
     @staticmethod
     def print_all(all_reviews, all_dates, all_ratings, all_names):  # print everything
         for i in range(len(all_ratings)):
-            print('~' + str(i + 1), " - ", all_names[i].text, " - ", all_dates[i].text,
+            print('~' + str(i + 1), " - ", all_names[i].text, " - ", all_dates[i],
                   " - ", all_ratings[i], " - ", all_reviews[i].text)
 
 
@@ -70,9 +73,57 @@ def get_average_rating(new_soup):     # parse average rating
     return average_rating
 
 
+def convert_dates(dates):
+    month = {
+        'января': 1,
+        'февраля': 2,
+        'марта': 3,
+        'апреля': 4,
+        'мая': 5,
+        'июня': 6,
+        'июля': 7,
+        'августа': 8,
+        'сентября': 9,
+        'октября': 10,
+        'ноября': 11,
+        'декабря': 12,
+    }
+    new_dates =[]
+    for d in dates:
+        date = d.split()
+        new_date = date[0] + '-' + str(month.get(date[1])) + '-' + date[2]
+        new_dates.append(new_date)
+    return new_dates
+
+
 def get_dates(new_soup):     # parse review`s dates
-    dates = new_soup.find_all('span', 'business-review-view__date')
-    return dates
+    unprepared_dates = new_soup.find_all('span', 'business-review-view__date')
+    dates = []
+    for d in unprepared_dates:
+        numbers = 0
+        date = d.text
+        for symbol in date:
+            if symbol.isdigit():
+                numbers += 1
+        if numbers < 3:
+            date += ' 2023'
+        date = date.split()
+        date = date[2] + " " + date[1] + " " + date[0]
+        dates.append(date)
+    prepared_dates = convert_dates(dates)
+    '''
+    dates = []
+    for d in unprepared_dates:
+        numbers = 0
+        date = d.text
+        for symbol in date:
+            if symbol.isdigit():
+                numbers += 1
+        if numbers < 3:
+            date += ' 2023'
+        
+    '''
+    return prepared_dates
 
 
 def get_title(new_soup):    # parse title of the restaurant
@@ -116,6 +167,18 @@ def parse(URL, FILE_PATH):
     print("Rating -", total_mark[0].text + "." + total_mark[2].text)
     print("-------------------------------------------------------------------------")
     Prints.print_all(reviews, review_dates, rating, names)
-
+    '''
+    with connect(
+            host="localhost",
+            user="root",
+            password="BackupDR",
+            database="reviews"
+    ) as connection:
+        for i in range(len(reviews)):
+            db_query = f'INSERT INTO reviews_data.reviews_list (id, score, author, review_data, review_text, restaurant)' \
+                       f'VALUES({i + 1}, {rating[i]}, {names[i].text}, {review_dates[i]}, {reviews[i].text}, {get_title(soup)})'
+            with connection.cursor() as cursor:
+                cursor.execute(db_query)
+    '''
     comments.parseLists(rating, names, reviews, review_dates)
-    run_analysis(comments.parseLists(rating, names, reviews, review_dates))
+    # run_analysis(comments.parseLists(rating, names, reviews, review_dates))
