@@ -159,6 +159,7 @@ def get_ratings(new_soup):    # parse review`s ratings
 
 
 def parse(URL, FILE_PATH):
+    print("STATUS: parsing in progress...")
     if os.path.exists(FILE_PATH) is False:
         Setup.get_source_html(URL)
     soup = Setup.create_soup(FILE_PATH)
@@ -175,3 +176,4 @@ def parse(URL, FILE_PATH):
     Prints.print_all(reviews, review_dates, rating, names)
     comments.parseLists(rating, names, reviews, review_dates)
     # run_analysis(comments.parseLists(rating, names, reviews, review_dates))
+
