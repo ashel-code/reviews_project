@@ -2,16 +2,12 @@ import time
 import os.path
 from selenium import webdriver
 from bs4 import BeautifulSoup
-from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from mysql.connector import connect
+from selenium.webdriver.support import expected_conditions as ec
 import structure.comments as comments
 from db_actions import DatabaseActions
-# from main import run_analysis
-import datetime
 
 
 class Setup:
@@ -30,12 +26,11 @@ class Setup:
         web_driver = webdriver.Chrome(executable_path='chromedriver', options=options)
         web_driver.get(url=url)
         time.sleep(7)
-
         for i in range(175):
             a = web_driver.find_element(By.CLASS_NAME, 'card-reviews-view__actions-button')
             web_driver.execute_script("arguments[0].scrollIntoView();", a)
             WebDriverWait(web_driver, 120000).until(
-                EC.presence_of_element_located((By.CLASS_NAME, 'business-review-view__body-text'))
+                ec.presence_of_element_located((By.CLASS_NAME, 'business-review-view__body-text'))
             )
             time.sleep(0.7)
 
@@ -47,16 +42,6 @@ class Setup:
 
 
 class Prints:
-    @staticmethod
-    def print_reviews(all_reviews):  # print all reviews
-        for i, review in enumerate(all_reviews):
-            print(i + 1, review.text)
-
-    @staticmethod
-    def print_dates(dates):  # print all dates
-        for i, date in enumerate(dates):
-            print(i + 1, date.text)
-
     @staticmethod
     def print_all(all_reviews, all_dates, all_ratings, all_names):  # print everything
         for i in range(len(all_ratings)):
@@ -94,7 +79,7 @@ def convert_dates(dates):
         'ноября': 11,
         'декабря': 12,
     }
-    new_dates =[]
+    new_dates = []
     for d in dates:
         date = d.split()
         new_date = date[0] + '-' + str(month.get(date[1])) + '-' + date[2]
@@ -158,11 +143,13 @@ def get_ratings(new_soup):    # parse review`s ratings
     return fixed_rates
 
 
-def parse(URL, FILE_PATH):
+
+
+def parse(url, file_path):
     print("STATUS: parsing in progress...")
-    if os.path.exists(FILE_PATH) is False:
-        Setup.get_source_html(URL)
-    soup = Setup.create_soup(FILE_PATH)
+    if os.path.exists(file_path) is False:
+        Setup.get_source_html(url)
+    soup = Setup.create_soup(file_path)
 
     reviews = get_reviews(soup)
     total_mark = get_average_rating(soup)
@@ -175,5 +162,3 @@ def parse(URL, FILE_PATH):
     print("-------------------------------------------------------------------------")
     Prints.print_all(reviews, review_dates, rating, names)
     comments.parseLists(rating, names, reviews, review_dates)
-    # run_analysis(comments.parseLists(rating, names, reviews, review_dates))
-
