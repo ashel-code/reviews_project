@@ -33,7 +33,6 @@ class DatabaseActions:
                 pre_result = cursor.fetchall()
                 cursor.close()
             connection.close()
-        print(pre_result)
         result = DatabaseActions.convert_to_unvectorized_class(pre_result)
         return result
 
@@ -45,11 +44,11 @@ class DatabaseActions:
                 password="BackupDR",
                 database="reviews"
         ) as connection:
-            query = f'INSERT INTO reviews (rating, review_date, author, review_text, restaurant) VALUES ({rating}, "{review_date}", "{author}", "{review_text}", "{restaurant}")'
+            query = f'INSERT INTO reviews (rating, review_date, author, review_text, restaurant) ' \
+                    f'VALUES ({rating}, "{review_date}", "{author}", "{review_text}", "{restaurant}")'
             with connection.cursor() as cursor:
                 cursor.execute(query)
                 connection.commit()
-                print("added")
                 cursor.close()
             connection.close()
 
