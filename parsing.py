@@ -6,7 +6,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as ec
-import structure.comments as comments
+from structure import comments
 from db_actions import DatabaseActions
 
 
@@ -26,13 +26,17 @@ class Setup:
         web_driver = webdriver.Chrome(executable_path='chromedriver', options=options)
         web_driver.get(url=url)
         time.sleep(7)
-        for i in range(175):
+        reviews_amount_element = web_driver.find_element(By.CSS_SELECTOR, 'h2')
+        reviews_amount = int(reviews_amount_element.text.split()[0])
+        temp_amount = 0
+        while temp_amount != reviews_amount:
             a = web_driver.find_element(By.CLASS_NAME, 'card-reviews-view__actions-button')
             web_driver.execute_script("arguments[0].scrollIntoView();", a)
             WebDriverWait(web_driver, 120000).until(
                 ec.presence_of_element_located((By.CLASS_NAME, 'business-review-view__body-text'))
             )
-            time.sleep(0.7)
+            temp_amount = len(web_driver.find_elements(By.CLASS_NAME, 'business-review-view__body-text'))
+            time.sleep(0.5)
 
         html = web_driver.page_source
         with open('page-source.html', 'w', encoding="utf-8") as file:
@@ -41,12 +45,10 @@ class Setup:
         web_driver.quit()
 
 
-class Prints:
-    @staticmethod
-    def print_all(all_reviews, all_dates, all_ratings, all_names):  # print everything
-        for i in range(len(all_ratings)):
-            print('~' + str(i + 1), " - ", all_names[i].text, " - ", all_dates[i],
-                  " - ", all_ratings[i], " - ", all_reviews[i])
+def print_all(all_reviews, all_dates, all_ratings, all_names):  # print everything
+    for i in range(len(all_ratings)):
+        print('~' + str(i + 1), " - ", all_names[i], " - ", all_dates[i],
+              " - ", all_ratings[i], " - ", all_reviews[i])
 
 
 def get_reviews(new_soup):     # parse reviews
@@ -102,18 +104,6 @@ def get_dates(new_soup):     # parse review`s dates
         date = date[2] + " " + date[1] + " " + date[0]
         dates.append(date)
     prepared_dates = convert_dates(dates)
-    '''
-    dates = []
-    for d in unprepared_dates:
-        numbers = 0
-        date = d.text
-        for symbol in date:
-            if symbol.isdigit():
-                numbers += 1
-        if numbers < 3:
-            date += ' 2023'
-        
-    '''
     return prepared_dates
 
 
@@ -126,7 +116,7 @@ def get_names(new_soup):    # parse user names
     all_names = new_soup.find_all('div', class_="business-review-view__author")
     fixed_names = []
     for name in all_names:
-        fixed_names.append(name.find_next('a'))
+        fixed_names.append(name.find_next('span').text)
     return fixed_names
 
 
@@ -141,8 +131,6 @@ def get_ratings(new_soup):    # parse review`s ratings
         fixed_rates.append(abs(rates[i] - rates[i - 1]))
     fixed_rates.append(rates[-1])
     return fixed_rates
-
-
 
 
 def parse(url, file_path):
@@ -160,5 +148,5 @@ def parse(url, file_path):
     print("Title -", get_title(soup))
     print("Rating -", total_mark[0].text + "." + total_mark[2].text)
     print("-------------------------------------------------------------------------")
-    Prints.print_all(reviews, review_dates, rating, names)
-    comments.parseLists(rating, names, reviews, review_dates)
+    print_all(reviews, review_dates, rating, names)
+    comments.parse_lists(rating, names, reviews, review_dates)

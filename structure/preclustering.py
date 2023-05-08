@@ -1,5 +1,6 @@
 from comments import Comment
 
+
 class Precluster:
     def __init__(self, 
                  id,

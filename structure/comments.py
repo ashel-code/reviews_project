@@ -1,4 +1,4 @@
-class Comment():
+class Comment:
     def __init__(self, 
                  id, 
                  score, 
@@ -14,14 +14,11 @@ class Comment():
         self.organization = organization
 
 
-
-
-
-def parseLists(scores, names, texts, dates):
+def parse_lists(scores, names, texts, dates):
     list_of_objects = []
     for i, (score, name, text, date) in enumerate(zip(scores, names, texts, dates)):
         # print("Score = {0}, Name = {1}, Text = {2}, Date = {3}", score, name.text, text.text, date.text)
-        obj = Comment(i, score, name.text, date, text.text)
+        obj = Comment(i, score, name.text, date, text)
         list_of_objects.append(obj)
 
     return list_of_objects
