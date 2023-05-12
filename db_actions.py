@@ -3,54 +3,45 @@ from structure.unvectorized_data import Unvectorized
 
 
 class DatabaseActions:
+    db_config = {
+        "host": "localhost",
+        "user": "root",
+        "password": "BackupDR",
+        "database": "reviews"
+    }
+
+    connection = connect(**db_config)
+
     @staticmethod
     def get_all():
-        with connect(
-            host="localhost",
-            user="root",
-            password="BackupDR",
-            database="reviews"
-        ) as connection:
-            query = 'SELECT * FROM reviews'
-            with connection.cursor() as cursor:
-                cursor.execute(query)
-                result = cursor.fetchall()
-                cursor.close()
-            connection.close()
+        query = 'SELECT * FROM reviews'
+        with DatabaseActions.connection.cursor() as cursor:
+            cursor.execute(query)
+            result = cursor.fetchall()
+            cursor.close()
+        DatabaseActions.connection.close()
         return result
 
     @staticmethod
     def get_unvectorized():
-        with connect(
-                host="localhost",
-                user="root",
-                password="BackupDR",
-                database="reviews"
-        ) as connection:
-            query = 'SELECT id, review_text FROM reviews WHERE vector IS NULL'
-            with connection.cursor() as cursor:
-                cursor.execute(query)
-                pre_result = cursor.fetchall()
-                cursor.close()
-            connection.close()
+        query = 'SELECT id, review_text FROM reviews WHERE vector IS NULL'
+        with DatabaseActions.connection.cursor() as cursor:
+            cursor.execute(query)
+            pre_result = cursor.fetchall()
+            cursor.close()
+        DatabaseActions.connection.close()
         result = DatabaseActions.convert_to_unvectorized_class(pre_result)
         return result
 
     @staticmethod
     def add_element(rating, review_date, author, review_text, restaurant):
-        with connect(
-                host="localhost",
-                user="root",
-                password="BackupDR",
-                database="reviews"
-        ) as connection:
-            query = f'INSERT INTO reviews (rating, review_date, author, review_text, restaurant) ' \
-                    f'VALUES ({rating}, "{review_date}", "{author}", "{review_text}", "{restaurant}")'
-            with connection.cursor() as cursor:
-                cursor.execute(query)
-                connection.commit()
-                cursor.close()
-            connection.close()
+        query = f'INSERT INTO reviews (rating, review_date, author, review_text, restaurant) ' \
+                f'VALUES ({rating}, "{review_date}", "{author}", "{review_text}", "{restaurant}")'
+        with DatabaseActions.connection.cursor() as cursor:
+            cursor.execute(query)
+            DatabaseActions.connection.commit()
+            cursor.close()
+        DatabaseActions.connection.close()
 
     @staticmethod
     def convert_to_unvectorized_class(data):

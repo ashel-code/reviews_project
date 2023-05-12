@@ -13,19 +13,24 @@ def main(args):
     # открывает json файл
     with open(filename) as json_file: 
         # проверка достаточно ли аргументов
+
+        data = json.load(json_file) 
+    # проверка достаточно ли аргументов
         if len(args) < 2:
             print("INFO: running without arguments")
-            data = json.load(json_file) 
         
             parse(data['url'], data['page_path'])
+            tokenize()
+            # TODO: run clusterization
+
         else:
             param = args[1]
 
-            if param.contains('p'):
+            if 'p' in param:
                 parse(data['url'], data['page_path'])
-            if param.contains('t'):
+            if 't' in param:
                 tokenize()
-            if param.contains('c'):
+            if 'c' in param:
                 # TODO: run clusterization
                 pass 
 

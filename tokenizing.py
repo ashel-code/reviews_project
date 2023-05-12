@@ -2,21 +2,17 @@ import torch
 from transformers import BertModel, BertTokenizer, BertConfig
 import numpy as np
 from structure.unvectorized_data import Unvectorized
-
+from db_actions import DatabaseActions as db
 
 
 def tokenize():
-    # TODO: data = database.getUnvectorized()
+    print("STATUS: running tokenization")
+    data = db.get_unvectorized()
 
-    data = [Unvectorized(1, 'какая я то умная шиза длиннее чем ноль и больше чем нечто другое вот'),
-      Unvectorized(5, 'текст  просто текст без знаков препинания'),
-      Unvectorized(12, 'помогите мне пожалуйста'),
-      Unvectorized(33, 'я так устал кодить что то что я не понимаю'),]
-    
-    tokenize(data)
+    tokenizeData(data)
 
 
-def tokenize(data):
+def tokenizeData(data):
     # Load the BERT tokenizer and configuration
     tokenizer = BertTokenizer.from_pretrained('bert-base-multilingual-cased')
     config = BertConfig.from_pretrained('bert-base-multilingual-cased')
