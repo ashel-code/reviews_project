@@ -1,13 +1,13 @@
 from mysql.connector import connect
 from structure.unvectorized_data import Unvectorized
-
+from get_config import data
 
 class DatabaseActions:
     db_config = {
-        "host": "localhost",
-        "user": "root",
-        "password": "BackupDR",
-        "database": "reviews"
+        "host": data('db_host'),
+        "user": data('db_user'),
+        "password": data('db_password'),
+        "database": data('db_database'),
     }
 
     connection = connect(**db_config)

@@ -78,14 +78,13 @@ venv/
 
 
 chromedriver_mac_arm64/
-dataset/reviews/reviews.ibd
-dataset/reviews/restaurants.ibd
-dataset/reviews/restaurants.ibd
-dataset/reviews/restaurants.ibd
+dataset/
 vector.txt
 data/page-source.html
 *.icloud
 .DS_Store
 .vscode/
 .idea/
+
+config.json
 
