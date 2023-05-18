@@ -1,2 +1,21 @@
+# How to use:
+
+1. Install python requirements:
+
+```
 pip install -r requirements.txt
-# AAAAAAAAAAAAAAAAA
+```
+
+2. Install **MySQL** (working on **v8.0.31**)
+3. Add **config.json** file of format:
+
+```json
+{
+    "url": 		"link you want to scan (yandex maps)",
+    "page_path": 	"Dump path",
+    "db_host": 		"Database host ip",
+    "db_user": 		"Database login",
+    "db_password": 	"Database password",
+    "db_database": 	"Database name"
+}
+```
