@@ -22,10 +22,10 @@ class Setup:
     @staticmethod
     def get_source_html(url):       # get source code of the page
         options = Options()
-        options.headless = True
+        options.headless = False
         web_driver = webdriver.Chrome(executable_path='chromedriver', options=options)
         web_driver.get(url=url)
-        time.sleep(7)
+        time.sleep(14)
         reviews_amount_element = web_driver.find_element(By.CSS_SELECTOR, 'h2')
         reviews_amount = int(reviews_amount_element.text.split()[0])
         temp_amount = 0
@@ -37,6 +37,7 @@ class Setup:
             )
             temp_amount = len(web_driver.find_elements(By.CLASS_NAME, 'business-review-view__body-text'))
             time.sleep(0.5)
+            print(temp_amount)
 
         html = web_driver.page_source
         with open('page-source.html', 'w', encoding="utf-8") as file:
@@ -144,9 +145,16 @@ def parse(url, file_path):
     review_dates = get_dates(soup)
     rating = get_ratings(soup)
     names = get_names(soup)
+    restaurant = get_title(soup)
 
     print("Title -", get_title(soup))
     print("Rating -", total_mark[0].text + "." + total_mark[2].text)
     print("-------------------------------------------------------------------------")
     print_all(reviews, review_dates, rating, names)
-    comments.parse_lists(rating, names, reviews, review_dates)
+    # comments.parse_lists(rating, names, reviews, review_dates)
+    for i in range(len(reviews)):
+        DatabaseActions.add_element(rating[i], review_dates[i], names[i], reviews[i], restaurant)
+    print("DATABASE UPDATED")
+    os.remove(file_path)
+    print("FILE REMOVED")
+
