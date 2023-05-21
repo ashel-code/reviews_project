@@ -1,4 +1,4 @@
-# How to use:
+# ## How to use:
 
 1. Install python requirements:
 
@@ -18,4 +18,10 @@ pip install -r requirements.txt
     "db_password": 	"Database password",
     "db_database": 	"Database name"
 }
+```
+
+
+```
+mysql> use db_name;
+mysql> source backup-file.sql;
 ```

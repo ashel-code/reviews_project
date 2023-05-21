@@ -89,3 +89,6 @@ data/page-source.html
 config.json
 
 page-source.html
+*.sql
+
+test1.py
