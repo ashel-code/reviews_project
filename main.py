@@ -2,7 +2,7 @@ import sys
 import json 
 from parsing import parse
 from tokenizing import tokenize
-from clusterization import *
+from clusterization import cluster
 from get_config import data
 
 def main(args):
@@ -13,7 +13,7 @@ def main(args):
         
             parse(data('url'), data('page_path'))
             tokenize()
-            # TODO: run clusterization
+            cluster()
 
         else:
             param = args[1]
@@ -23,8 +23,11 @@ def main(args):
             if 't' in param:
                 tokenize()
             if 'c' in param:
-                # TODO: run clusterization
-                pass 
+                cluster()
+            if 'r' in param:
+                # TODO: run prediction
+                pass
+                
 
 
 # вызов основной функции

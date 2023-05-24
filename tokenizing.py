@@ -10,7 +10,7 @@ def tokenize():
     data = db.get_unvectorized()
 
     tokenizeData(data)
-
+ 
 
 def tokenizeData(data):
     # Load the BERT tokenizer and configuration
@@ -28,7 +28,6 @@ def tokenizeData(data):
         tokenize_one(data[i], model, tokenizer)
     
     print('FINISHED', len(data), '/', len(data))
-
 
 
 def tokenize_one(record, model, tokenizer):
