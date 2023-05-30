@@ -41,6 +41,15 @@ class DatabaseActions:
                 con.commit()
     
     @staticmethod
+    def get_parsed():
+        with connect(**DatabaseActions.db_config) as con:
+            query = 'SELECT review_text, vector, is_fake FROM reviews WHERE manually_tested = 1'
+            with con.cursor() as cursor:
+                cursor.execute(query)
+                result = cursor.fetchall()
+        return result
+
+    @staticmethod
     def add_vector(id, vector):
         str_vector = vector.dumps().hex()
 
