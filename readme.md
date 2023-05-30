@@ -1,4 +1,4 @@
-# ## How to use:
+# ## How to install:
 
 1. Install python requirements:
 
@@ -7,7 +7,7 @@ pip install -r requirements.txt
 ```
 
 2. Install **MySQL** (working on **v8.0.31**)
-3. Add **config.json** file of format:
+3. Add in the root **config.json** file of format:
 
 ```json
 {
@@ -20,6 +20,7 @@ pip install -r requirements.txt
 }
 ```
 
+4. Download dump file
 
 ```
 mysql> use db_name;
