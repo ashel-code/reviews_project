@@ -92,3 +92,5 @@ page-source.html
 *.sql
 
 test1.py
+
+model-*/
