@@ -94,3 +94,5 @@ page-source.html
 test1.py
 
 model-*/
+data/
+test*
