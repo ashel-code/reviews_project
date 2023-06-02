@@ -1,4 +1,5 @@
 import pickle
+import numpy as np
 
 class Record():
     def __init__(self, 
@@ -11,6 +12,10 @@ class Record():
 
 
 class StoredData():
+    data_all = []
+    data_train = []
+    data_test = []
+
     def __init__(self, data):
         dataset = [[data[0][0], pickle.loads(bytes.fromhex(data[0][1])), data[0][2]]]
         for i in range(1, len(data)):  
@@ -44,30 +49,97 @@ class StoredData():
         not_fake_len_data = round(len(fake) * 1.5)
         not_fake_len_all = len(not_fake)
         not_fake_len_train = round(not_fake_len_data * 0.8)
-        not_fake_len_test = not_fake_len_data - not_fake_len_train
+        not_fake_len_test = fake_len_test
         
-
-
-        data_all = []
-        data_train = []
-        data_test = []
                     
         for i in range(fake_len_all):
             res_vector = ((fake[i][1] / max_abs_value) + 1) / 2
 
             if i < fake_len_train:
-                data_train.append(Record(fake[i][0], res_vector, fake[i][2]))
+                self.data_train.append(Record(fake[i][0], res_vector, fake[i][2]))
             elif i < fake_len_train + fake_len_test:
-                data_test.append(Record(fake[i][0], res_vector, fake[i][2]))
+                self.data_test.append(Record(fake[i][0], res_vector, fake[i][2]))
 
-            data_all.append(Record(fake[i][0], res_vector, fake[i][2]))
+            self.data_all.append(Record(fake[i][0], res_vector, fake[i][2]))
 
         for i in range(not_fake_len_all):
             res_vector = ((not_fake[i][1] / max_abs_value) + 1) / 2
 
             if i < not_fake_len_train:
-                data_train.append(Record(not_fake[i][0], res_vector, not_fake[i][2]))
+                self.data_train.append(Record(not_fake[i][0], res_vector, not_fake[i][2]))
             elif i < not_fake_len_train + not_fake_len_test:
-                data_test.append(Record(not_fake[i][0], res_vector, not_fake[i][2]))
+                self.data_test.append(Record(not_fake[i][0], res_vector, not_fake[i][2]))
 
-            data_all.append(Record(not_fake[i][0], res_vector, not_fake[i][2]))
+            self.data_all.append(Record(not_fake[i][0], res_vector, not_fake[i][2]))
+
+
+        np.random.shuffle(self.data_train)
+        np.random.shuffle(self.data_test)
+        np.random.shuffle(self.data_all)
+
+    def get_x_train(self):
+        _x_train = []
+        for i in range(len(self.data_train)):
+            _x_train.append(self.data_train[i].x)
+        return np.array(_x_train)
+    
+    def get_y_train(self):
+        _y_train = []
+        for i in range(len(self.data_train)):
+            _y_train.append(self.data_train[i].y)
+        return np.array(_y_train)
+ 
+    def get_texts_train(self):
+        _texts_train = []
+        for i in range(len(self.data_train)):
+            _texts_train.append(self.data_train[i].text)
+        return np.array(_texts_train)
+
+    def get_x_test(self):
+        _x_test = []
+        for i in range(len(self.data_test)):
+            _x_test.append(self.data_test[i].x)
+        return np.array(_x_test)
+    
+    def get_y_test(self):
+        _y_test = []
+        for i in range(len(self.data_test)):
+            _y_test.append(self.data_test[i].y)
+        return np.array(_y_test)
+    
+    def get_texts_test(self):
+        _texts_test = []
+        for i in range(len(self.data_train)):
+            _texts_test.append(self.data_test[i].text)
+        return np.array(_texts_test)
+    
+    def get_x_all(self):
+        _x_all = []
+        for i in range(len(self.data_all)):
+            _x_all.append(self.data_all[i].x)
+
+        return np.array(_x_all)
+    
+    def get_y_all(self):
+        _y_all = []
+        for i in range(len(self.data_all)):
+            _y_all.append(self.data_all[i].y)
+
+        return np.array(_y_all)
+    
+    def get_texts_all(self):
+        _texts_all = []
+        for i in range(len(self.data_all)):
+            _texts_all.append(self.data_all[i].text)
+        return np.array(_texts_all)
+
+    x_train = property(get_x_train) 
+    y_train = property(get_y_train)
+    texts_train = property(get_texts_train)
+    x_test = property(get_x_test)
+    y_test = property(get_y_test)
+    texts_test = property(get_texts_test)
+    x_all = property(get_x_all)
+    y_all = property(get_y_all)
+    texts_all = property(get_texts_all)
+
