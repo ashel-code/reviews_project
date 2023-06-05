@@ -18,7 +18,7 @@ class StoredData():
     data_train = []
     data_test = []
 
-    def __init__(self, data, do_smote=False):
+    def __init__(self, data, do_smote=False, smote_ratio=1, class_ratio=1, test_ratio=0.7):
         dataset = [[data[0][0], pickle.loads(bytes.fromhex(data[0][1])), data[0][2]]]
         for i in range(1, len(data)):  
 
@@ -37,13 +37,13 @@ class StoredData():
         # max_abs_value = 1
 
         fake_len_all = len(fake)
-        fake_len_train = round(len(fake) * 0.7)
+        fake_len_train = round(len(fake) * test_ratio)
         fake_len_test = fake_len_all - fake_len_train
 
-        not_fake_len_data = round(len(fake) * 3)
+        not_fake_len_data = round(len(fake) * class_ratio)
         # not_fake_len_data = len(not_fake) 
         not_fake_len_all = len(not_fake) 
-        not_fake_len_train = round(not_fake_len_data * 0.8)
+        not_fake_len_train = round(not_fake_len_data * test_ratio)
         not_fake_len_test = fake_len_test
         
         print("fake_len_all: ", fake_len_all)
@@ -83,7 +83,7 @@ class StoredData():
             for i in range(len(self.data_train)):
                 X.append(self.data_train[i].x)
                 y.append(self.data_train[i].y)    
-            smt = KMeansSMOTE(sampling_strategy=0.7)
+            smt = SMOTE(sampling_strategy=smote_ratio)
             X_smote, y_smote = smt.fit_resample(X, y)
 
             self.data_train = []
