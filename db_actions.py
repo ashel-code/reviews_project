@@ -43,7 +43,7 @@ class DatabaseActions:
     @staticmethod
     def get_parsed():
         with connect(**DatabaseActions.db_config) as con:
-            query = 'SELECT review_text, vector, is_fake FROM reviews WHERE manually_tested = 1'
+            query = 'SELECT review_text, vector, is_fake FROM reviews WHERE manually_tested = 1 and is_fake is not NULL'
             with con.cursor() as cursor:
                 cursor.execute(query)
                 result = cursor.fetchall()
