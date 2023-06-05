@@ -10,8 +10,9 @@ def read_list():
         return n_list
 
 
-final_texts = read_list()
-fdist_sw = nltk.probability.FreqDist(final_texts)
+texts = read_list()
+fdist_sw = nltk.probability.FreqDist(texts)
+morph = pymorphy2.MorphAnalyzer()
 
 
 def get_prob(input):
@@ -22,7 +23,7 @@ def get_prob(input):
         ob = morph.parse(i)[0].normal_form
         if ob in fdist_sw:
             # print(fdist_sw[ob], len(final_texts))
-            res *= fdist_sw[ob] / len(final_texts)
+            res *= fdist_sw[ob] / len(texts)
             n += 1
     if n == 0:
         return 0
