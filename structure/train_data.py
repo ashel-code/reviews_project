@@ -44,7 +44,7 @@ class StoredData():
         # not_fake_len_data = len(not_fake) 
         not_fake_len_all = len(not_fake) 
         not_fake_len_train = round(not_fake_len_data * test_ratio)
-        not_fake_len_test = fake_len_test
+        not_fake_len_test = fake_len_test * 3 
         
         print("fake_len_all: ", fake_len_all)
         print("fake_len_train: ", fake_len_train)
@@ -83,7 +83,7 @@ class StoredData():
             for i in range(len(self.data_train)):
                 X.append(self.data_train[i].x)
                 y.append(self.data_train[i].y)    
-            smt = SMOTE(sampling_strategy=smote_ratio)
+            smt = SVMSMOTE(sampling_strategy=smote_ratio)
             X_smote, y_smote = smt.fit_resample(X, y)
 
             self.data_train = []

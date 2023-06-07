@@ -2,7 +2,6 @@ import sys
 import json 
 from parsing import parse
 from tokenizing import tokenize
-from clusterization import cluster
 from get_config import data
 
 def main(args):
@@ -12,8 +11,8 @@ def main(args):
             print("INFO: running without arguments")
         
             parse(data('url'), data('page_path'))
-            tokenize()
-            cluster()
+            tokenize(write_to_database=True)
+            # TODO: cluster()
 
         else:
             param = args[1]
@@ -21,9 +20,10 @@ def main(args):
             if 'p' in param:
                 parse(data('url'), data('page_path'))
             if 't' in param:
-                tokenize()
+                tokenize(write_to_database=True)
             if 'c' in param:
-                cluster()
+                # TODO: cluster()
+                 pass
             if 'r' in param:
                 # TODO: run prediction
                 pass

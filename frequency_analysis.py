@@ -28,3 +28,4 @@ def get_prob(input):
     if n == 0:
         return 0
     return math.pow(res, 1/n)
+
