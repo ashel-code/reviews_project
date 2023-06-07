@@ -13,7 +13,9 @@ def predict(data):
     vector = tokenize(data=data)
     
     neuro_res = model.predict(vector)
-    
+
     algo_res = []
     for i in range(len(data)):
         algo_res.append(get_prob(data[i]))
+
+    
