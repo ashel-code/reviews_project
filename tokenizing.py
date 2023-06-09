@@ -1,7 +1,5 @@
 import torch
 from transformers import BertModel, BertTokenizer, BertConfig
-import numpy as np
-from db_actions import DatabaseActions as db
 
 
 # Load the BERT tokenizer and configuration

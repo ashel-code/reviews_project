@@ -10,7 +10,7 @@ def get_model():
 
 def predict(data):
     model = get_model()
-
+    
     print("STATUS: model loaded")
     vector = tokenize(data=data)
     vector = np.array(vector)
