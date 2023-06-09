@@ -1,7 +1,6 @@
 import torch
 from transformers import BertModel, BertTokenizer, BertConfig
 import numpy as np
-from structure.unvectorized_data import Unvectorized
 from db_actions import DatabaseActions as db
 
 
@@ -15,26 +14,15 @@ config.model_max_length = 2048
 model = BertModel.from_pretrained('bert-base-multilingual-cased', config=config, ignore_mismatched_sizes=True)
 
 
-def tokenize(data=None, write_to_database=False):
+def tokenize(data=None):
     print("STATUS: running tokenization")
+    res = []
+    for i in range(0, len(data)):
+        print('RUNNING', i + 1, '/', len(data), end='\r')
+        vector = tokenize_one(data[i])
 
-    if write_to_database:
-        data = db.get_unvectorized()
-    
-        for i in range(0, len(data)):
-            print('RUNNING', i + 1, '/', len(data), end='\r')
-            vector = tokenize_one(data[i])
-            res.append(vector)
-
-            db.add_vector(data[i].id, vector)
-    else:
-        res = []
-        for i in range(0, len(data)):
-            print('RUNNING', i + 1, '/', len(data), end='\r')
-            vector = tokenize_one(data[i])
-
-            res.append(vector)
-        return res
+        res.append(vector)
+    return res
 
 
 def tokenize_one(record):

@@ -1,7 +1,5 @@
 from mysql.connector import connect
-from structure.unvectorized_data import Unvectorized
 from get_config import get_data
-import pickle5 as pickle
 
 
 class DatabaseActions:
@@ -19,16 +17,6 @@ class DatabaseActions:
             with con.cursor() as cursor:
                 cursor.execute(query)
                 result = cursor.fetchall()
-        return result
-
-    @staticmethod
-    def get_unvectorized():
-        with connect(**DatabaseActions.db_config) as con:
-            query = 'SELECT id, review_text FROM reviews WHERE vector IS NULL'
-            with con.cursor() as cursor:
-                cursor.execute(query)
-                pre_result = cursor.fetchall()
-        result = DatabaseActions.convert_to_unvectorized_class(pre_result)
         return result
 
     @staticmethod
@@ -61,15 +49,6 @@ class DatabaseActions:
             with con.cursor() as cursor:
                 cursor.execute(query)
                 con.commit()
-
-    @staticmethod
-    def convert_to_unvectorized_class(data):
-        result = []
-        for d in data:
-            temp = Unvectorized(d[0], d[1])
-            result.append(temp)
-        return result
-    
 
 # import numpy as np
 
