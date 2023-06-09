@@ -1,6 +1,9 @@
 import pickle
 import numpy as np
 from imblearn.over_sampling import *
+import matplotlib.pyplot as plt
+from collections import Counter
+from numpy import where
 
 
 class Record():
@@ -44,7 +47,7 @@ class StoredData():
         # not_fake_len_data = len(not_fake) 
         not_fake_len_all = len(not_fake) 
         not_fake_len_train = round(not_fake_len_data * test_ratio)
-        not_fake_len_test = fake_len_test * 3 
+        not_fake_len_test = fake_len_test * 9
         
         print("fake_len_all: ", fake_len_all)
         print("fake_len_train: ", fake_len_train)
@@ -83,13 +86,46 @@ class StoredData():
             for i in range(len(self.data_train)):
                 X.append(self.data_train[i].x)
                 y.append(self.data_train[i].y)    
+            
+            # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            X_t = self.x_train.reshape((len(self.x_train), 768))
+            y_t = self.y_train
+
+            print(type(X_t[0]))
+            print(type(y_t[0]))
+
+            plt.figure(figsize=(15, 11))
+            plt.title('Result before SMOTE')
+            plt.scatter(X_t[y_t==0][:, 0], X_t[y_t==0][:, 1], label='norm')
+            plt.scatter(X_t[y_t==1][:, 0], X_t[y_t==1][:, 1], label='fake')
+            plt.legend()
+            plt.grid(False)
+            plt.show()
+
+            # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
             smt = SVMSMOTE(sampling_strategy=smote_ratio)
             X_smote, y_smote = smt.fit_resample(X, y)
+
+            # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            # X_t = np.array(X_smote).reshape((len(X_smote), 768))
+            # y_t = y_smote
+
+            # plt.figure(figsize=(9, 6))
+            # plt.title('Result after SMOTE')
+            # plt.scatter(X_t[y_t==0][:, 0], X_t[y_t==0][:, 1], label='norm')
+            # plt.scatter(X_t[y_t==1][:, 0], X_t[y_t==1][:, 1], label='fake')
+            # plt.legend()
+            # plt.grid(False)
+            # plt.show()
+
+            # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
             self.data_train = []
             for i in range(len(X_smote)):
                 self.data_train.append(Record(None, X_smote[i], y_smote[i]))
             
+
 
         np.random.shuffle(self.data_train)
         np.random.shuffle(self.data_test)
@@ -117,7 +153,7 @@ class StoredData():
         _texts_train = []
         for i in range(len(self.data_train)):
             _texts_train.append(self.data_train[i].text)
-        return np.array(_texts_train)
+        return _texts_train
 
     def get_x_test(self):
         _x_test = []

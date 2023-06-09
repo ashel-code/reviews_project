@@ -2,7 +2,7 @@ import sys
 import json 
 from parsing import parse
 from tokenizing import tokenize
-from get_config import data
+from get_config import get_data
 
 def main(args):
 
@@ -10,7 +10,7 @@ def main(args):
         if len(args) < 2:
             print("INFO: running without arguments")
         
-            parse(data('url'), data('page_path'))
+            parse(get_data('url'), get_data('page_path'))
             tokenize(write_to_database=True)
             # TODO: cluster()
 
@@ -18,7 +18,7 @@ def main(args):
             param = args[1]
 
             if 'p' in param:
-                parse(data('url'), data('page_path'))
+                parse(get_data('url'), get_data('page_path'))
             if 't' in param:
                 tokenize(write_to_database=True)
             if 'c' in param:

@@ -1,15 +1,15 @@
 from mysql.connector import connect
 from structure.unvectorized_data import Unvectorized
-from get_config import data
+from get_config import get_data
 import pickle5 as pickle
 
 
 class DatabaseActions:
     db_config = {
-        "host": data('db_host'),
-        "user": data('db_user'),
-        "password": data('db_password'),
-        "database": data('db_database'),
+        "host": get_data('db_host'),
+        "user": get_data('db_user'),
+        "password": get_data('db_password'),
+        "database": get_data('db_database'),
     }
 
     @staticmethod

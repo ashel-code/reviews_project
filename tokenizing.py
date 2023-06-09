@@ -37,11 +37,9 @@ def tokenize(data=None, write_to_database=False):
         return res
 
 
-
-
 def tokenize_one(record):
-    text = record.text
-    # print(text)
+    text = record
+    # print(text) 
     # Токенизация и пакетирование текстов
     tokenized_text = tokenizer.encode(text, add_special_tokens=True)
 

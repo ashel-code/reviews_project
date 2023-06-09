@@ -2,15 +2,10 @@ import math
 import pickle5 as pickle
 import pymorphy2
 import nltk
+from get_config import read_list
 
 
-def read_list():
-    with open('./data/texts.bin', 'rb') as fp:
-        n_list = pickle.load(fp)
-        return n_list
-
-
-texts = read_list()
+texts = read_list('./data/texts.bin')
 fdist_sw = nltk.probability.FreqDist(texts)
 morph = pymorphy2.MorphAnalyzer()
 
