@@ -86,7 +86,7 @@ data/page-source.html
 .vscode/
 .idea/
 
-config.json
+
 
 page-source.html
 *.sql

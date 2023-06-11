@@ -17,5 +17,5 @@ def process_list():
     return jsonify({'result': predict(input_list).tolist()})
 
 if __name__ == '__main__':
-    app.run()
+    app.run(host='0.0.0.0', port=5000)
 
