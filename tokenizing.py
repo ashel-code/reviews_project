@@ -3,13 +3,13 @@ from transformers import BertModel, BertTokenizer, BertConfig
 
 
 # Load the BERT tokenizer and configuration
-tokenizer = BertTokenizer.from_pretrained('bert-base-multilingual-cased')
-config = BertConfig.from_pretrained('bert-base-multilingual-cased')
+tokenizer = BertTokenizer.from_pretrained('DeepPavlov/rubert-base-cased')
+config = BertConfig.from_pretrained('DeepPavlov/rubert-base-cased')
 config.max_position_embeddings = 2048 # Increase the maximum sequence length
 config.model_max_length = 2048 
 
 # Load the BERT model with the modified configuration
-model = BertModel.from_pretrained('bert-base-multilingual-cased', config=config, ignore_mismatched_sizes=True)
+model = BertModel.from_pretrained('DeepPavlov/rubert-base-cased', config=config, ignore_mismatched_sizes=True)
 
 
 def tokenize(data=None):

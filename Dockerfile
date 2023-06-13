@@ -10,10 +10,10 @@ COPY . /app
 
 WORKDIR /app
 
-EXPOSE 5000
+EXPOSE 8000
 
 ENV FLASK_APP=app
 ENV FLASK_ENV=development
 ENV CUDA_VISIBLE_DEVICES=-1
 
-CMD [ "gunicorn", "--bind", "0.0.0.0:5000", "app:app" ]
+CMD python3 app.py
