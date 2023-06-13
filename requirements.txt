@@ -3,3 +3,4 @@ numpy==1.22.4
 tensorflow==2.12.0
 torch==2.0.0
 transformers==4.27.4
+gunicorn

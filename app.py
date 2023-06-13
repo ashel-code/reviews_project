@@ -1,10 +1,9 @@
 from predict import predict 
-
 from flask import Flask, jsonify, request
 
 app = Flask(__name__)
 
-@app.route('/process_list', methods=['POST'])
+@app.route('/', methods=['POST'])
 def process_list():
     data = request.json['list']
     # Assuming the input is a JSON object with a "list" key containing the list
@@ -12,8 +11,8 @@ def process_list():
 
     # Perform any processing on the list if needed
 
-    return jsonify({'result': predict(input_list).tolist()})
+    return jsonify({'result': str(predict(input_list))})
 
 if __name__ == '__main__':
-    app.run()
+    app.run(host='0.0.0.0', port=5000)
 
