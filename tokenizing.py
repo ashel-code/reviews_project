@@ -16,7 +16,6 @@ def tokenize(data=None):
     print("STATUS: running tokenization")
     res = []
     for i in range(0, len(data)):
-        print('RUNNING', i + 1, '/', len(data), end='\r')
         vector = tokenize_one(data[i])
 
         res.append(vector)

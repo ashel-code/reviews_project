@@ -13,17 +13,25 @@ def predict(data):
         neuro_res = []
     
         print("STATUS: model loaded")
-        for text in data:
-            lst = text.split(".", "\n")
+        ln = len(data)
+        for i in range(ln):
+            text = data[i]
+            print('RUNNING', i + 1, '/', ln, end='\r')
+            lst = text.split(".\n!)(?")
             vector = tokenize(data=lst)
             
 
             vector = np.array(vector)
             vector = vector.reshape((len(vector), 24, 32))
 
-            neuro_pre_res = model.predict(vector)
-            r1 = np.average(neuro_pre_res)
 
-            neuro_res.append(r1)
+            neuro_pre_res = model.predict(vector)
+            r = 0
+            for i in range(len(neuro_pre_res)):
+                r += neuro_pre_res[i] * len(lst[i])
+            
+            r /= (len(text) * len(neuro_pre_res))
+
+            neuro_res.append(float(r))
 
         return neuro_res
