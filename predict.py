@@ -35,9 +35,9 @@ def predict(data):
 
             neuro_pre_res = model.predict(vector)
             r = 0
-            for i in range(len(neuro_pre_res)):
-                print(lst[i] + "\n") 
-                r += neuro_pre_res[i] * len(lst[i])
+            for j in range(len(neuro_pre_res)):
+                print(lst[j] + "\n") 
+                r += neuro_pre_res[j] * len(lst[j])
             
             r /= len(text)
 
