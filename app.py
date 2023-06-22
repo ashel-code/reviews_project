@@ -24,13 +24,14 @@ async def process_list(my_list: dict):
     :param my_list: List of reviews from Google extension
     :return: List of analysed reviews
     """
+    # Assuming the input is a JSON object with a "list" key containing the list
     data = my_list["list"]
-
-    input_list = data  # Assuming the input is a JSON object with a "list" key containing the list
+    input_list = data
 
     return {"result": predict(input_list)}
 
 
 if __name__ == "__main__":
+    # Run server
     port = int(os.environ.get('PORT', 8000))
     run(app, host="0.0.0.0", port=port)
