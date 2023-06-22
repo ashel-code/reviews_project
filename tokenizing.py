@@ -1,3 +1,4 @@
+"""Tokenization module"""
 import torch
 from transformers import BertModel, BertTokenizer, BertConfig
 
@@ -24,8 +25,8 @@ def tokenize(data=None):
 
 def tokenize_one(record):
     text = record
-    # print(text) 
-    # Токенизация и пакетирование текстов
+
+    # Tokenization and text bundling
     tokenized_text = tokenizer.encode(text, add_special_tokens=True)
 
     max_len = len(tokenized_text)
@@ -36,6 +37,5 @@ def tokenize_one(record):
     with torch.no_grad():
         outputs = model(input_ids)
         last_hidden_state = outputs[0][:, 0, :].numpy()
-    
 
     return last_hidden_state[0]

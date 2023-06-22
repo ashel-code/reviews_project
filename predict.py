@@ -1,15 +1,14 @@
+"""Module to analyse reviews"""
+import numpy as np
 import tensorflow as tf
 from get_config import get_data
 from tokenizing import tokenize
-import numpy as np
-import re
-
 
 
 def predict(data):
     with tf.device('/cpu:0'):
         model_link = get_data('model_path')
-        model =  tf.keras.models.load_model(model_link)
+        model = tf.keras.models.load_model(model_link)
         
         neuro_res = []
     
@@ -27,11 +26,9 @@ def predict(data):
             lst = text.split('.')
 
             vector = tokenize(data=lst)
-            
 
             vector = np.array(vector)
             vector = vector.reshape((len(vector), 24, 32))
-
 
             neuro_pre_res = model.predict(vector)
             r = 0
